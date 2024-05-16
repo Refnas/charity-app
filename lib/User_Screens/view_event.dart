@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+
 import '../main.dart';
 
 class DataModel{
@@ -24,19 +25,20 @@ class DataModel{
   });
 }
 
-class admin_view_event extends StatefulWidget {
-  const admin_view_event({Key? key}) : super(key: key);
+class view_event extends StatefulWidget {
+  const view_event({Key? key}) : super(key: key);
 
   @override
-  State<admin_view_event> createState() => _admin_view_eventState();
+  State<view_event> createState() => _view_eventState();
 }
 
-class _admin_view_eventState extends State<admin_view_event> {
+class _view_eventState extends State<view_event> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Food Donations"),
+        title: Text("My Events"),
         centerTitle: true,
         backgroundColor: HexColor("#FB6D48"),
       ),
@@ -173,7 +175,8 @@ class _admin_view_eventState extends State<admin_view_event> {
   }
 
   Future<List<DataModel>> getData() async {
-    final response = await http.get(Uri.parse("http://$IP_Address/Charity_Hope/admin_event_display.php"));
+    String url = "http://$IP_Address/Charity_Hope/user_view_event.php";
+    final response = await http.post(Uri.parse(url),body: {"uid":userId});
     var responseData = jsonDecode(response.body);
     List<DataModel> users = [];
     for (var singleuser in responseData) {

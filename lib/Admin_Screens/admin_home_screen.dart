@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:charity_hope/Admin_Screens/admin_book_event.dart';
 import 'package:charity_hope/Admin_Screens/admin_craft_details.dart';
+import 'package:charity_hope/Admin_Screens/admin_view_event.dart';
 import 'package:charity_hope/Admin_Screens/view_food_donation.dart';
 import 'package:charity_hope/Admin_Screens/view_money_donations.dart';
 import 'package:charity_hope/Login_and_Register/user_login_screen.dart';
@@ -438,7 +439,7 @@ class _admin_homeState extends State<admin_home> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Events",
+                                    "Manage Events",
                                     style: GoogleFonts.acme(fontSize: 23, color: Colors.black, fontWeight: FontWeight.w600),
                                   ),
                                 ),
@@ -487,7 +488,9 @@ class _admin_homeState extends State<admin_home> {
                                     height: 50,
                                     padding: EdgeInsets.only(top: 10,left: 15),
                                     child: ElevatedButton(
-                                      onPressed: (){},
+                                      onPressed: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => admin_view_event()));
+                                      },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: HexColor("#FB6D48")
                                       ),
