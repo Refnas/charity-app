@@ -50,6 +50,8 @@ dependencies:
   intl_phone_field: ^3.2.0
   flutter_svg: ^1.1.6
   syncfusion_flutter_datepicker: ^25.1.42
+  url_launcher: ^6.1.5
+  file_picker:
 
 dev_dependencies:
   flutter_test:

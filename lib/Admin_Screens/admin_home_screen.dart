@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:charity_hope/Admin_Screens/admin_book_event.dart';
 import 'package:charity_hope/Admin_Screens/admin_craft_details.dart';
 import 'package:charity_hope/Admin_Screens/admin_view_event.dart';
+import 'package:charity_hope/Admin_Screens/admin_view_orders.dart';
 import 'package:charity_hope/Admin_Screens/view_food_donation.dart';
 import 'package:charity_hope/Admin_Screens/view_money_donations.dart';
 import 'package:charity_hope/Login_and_Register/user_login_screen.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Datamodel{
   final String id;
@@ -75,31 +78,31 @@ class _admin_homeState extends State<admin_home> {
                 ),
                 SizedBox(height: 20,),
                 ListTile(
-                  leading: Icon(Icons.person,color: Colors.black,),
-                  title: Text("My profile",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black),),
+                  leading: Icon(Icons.currency_rupee_rounded,color: Colors.black,),
+                  title: Text("Manage money donations",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black)),
                   onTap: (){
-                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => view_money_donation()));
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.food_bank_outlined,color: Colors.black,),
+                  title: Text("Manage food booking",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black),),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => view_food_donation()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.shopping_cart,color: Colors.black,),
-                  title: Text("My Cart",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black)),
+                  title: Text("Manage Orders",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black)),
                   onTap: (){
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => cart_display()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => admin_view_orders()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.event,color: Colors.black,),
-                  title: Text("Events",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black)),
+                  title: Text("Manage events",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black)),
                   onTap: (){
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.currency_rupee_rounded,color: Colors.black,),
-                  title: Text("My Donations",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black)),
-                  onTap: (){
-                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => admin_view_event()));
                   },
                 ),
                 SizedBox(height: 20,),
@@ -113,9 +116,7 @@ class _admin_homeState extends State<admin_home> {
                 ListTile(
                   leading: Icon(Icons.call,color: Colors.black),
                   title: Text("Contact for enquiry",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black),),
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
+                  onTap: () => _makePhoneCall('tel:+918111977259'),
                 ),
                 ListTile(
                   leading: Icon(Icons.group,color: Colors.black),
@@ -532,5 +533,14 @@ class _admin_homeState extends State<admin_home> {
     }
     return users;
   }
+
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 
 }

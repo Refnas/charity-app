@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:charity_hope/Admin_Screens/Update_craft.dart';
 import 'package:charity_hope/Admin_Screens/add_craft.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,6 +35,13 @@ class admin_craft_details extends StatefulWidget {
 }
 
 class _admin_craft_detailsState extends State<admin_craft_details> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +162,7 @@ class _admin_craft_detailsState extends State<admin_craft_details> {
                                       height: 35,
                                       child: ElevatedButton(
                                         onPressed: (){
-                                          // Navigator.push(context, MaterialPageRoute(builder: (context) => craft_details(craft_data: snapshot.data[index])));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => update_craft(craftData: snapshot.data[index])));
                                         },
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.black

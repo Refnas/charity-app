@@ -6,6 +6,7 @@ import 'package:charity_hope/User_Screens/donate_food.dart';
 import 'package:charity_hope/User_Screens/donate_money.dart';
 import 'package:charity_hope/User_Screens/my_donations.dart';
 import 'package:charity_hope/User_Screens/my_food_bookings.dart';
+import 'package:charity_hope/User_Screens/my_orders.dart';
 import 'package:charity_hope/User_Screens/view_event.dart';
 import 'package:charity_hope/main.dart';
 import 'package:flutter/material.dart';
@@ -86,9 +87,9 @@ class _home_screenState extends State<home_screen> {
                 SizedBox(height: 20,),
                 ListTile(
                   leading: Icon(Icons.person,color: Colors.black,),
-                  title: Text("My profile",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black),),
+                  title: Text("My Orders",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black),),
                   onTap: (){
-                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => my_orders()));
                   },
                 ),
                 ListTile(
@@ -102,7 +103,7 @@ class _home_screenState extends State<home_screen> {
                   leading: Icon(Icons.event,color: Colors.black,),
                   title: Text("Events",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black)),
                   onTap: (){
-                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => view_event()));
                   },
                 ),
                 ListTile(

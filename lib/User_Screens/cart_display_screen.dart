@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:charity_hope/User_Screens/Payment_user.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -32,8 +33,29 @@ class cart_display extends StatefulWidget {
 
 class _cart_displayState extends State<cart_display> {
 
+  double totalCartPrice = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    totalCartPrice = 0.0;
+    calculateTotalPrice();
+  }
+
+  void calculateTotalPrice() async {
+    List<CartData> cartItems = await cartData();
+    double total = 0.0;
+    for (var item in cartItems) {
+      total += double.parse(item.price) * double.parse(item.qty);
+    }
+    setState(() {
+      totalCartPrice = total;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("My Cart"),
@@ -45,7 +67,7 @@ class _cart_displayState extends State<cart_display> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => craft_display()));
               },
               icon: Icon(Icons.add)
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -114,7 +136,7 @@ class _cart_displayState extends State<cart_display> {
                                         child: ElevatedButton(
                                           onPressed: (){
                                             setState(() {
-                                              deleteCartItem(snapshot.data[index].id);
+                                              deleteCartItem(snapshot.data[index].id, price * double.parse(snapshot.data[index].qty));
                                             });
                                           },
                                           style: ElevatedButton.styleFrom(
@@ -128,7 +150,7 @@ class _cart_displayState extends State<cart_display> {
                                     ],
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 12,top: 7),
+                                    margin: EdgeInsets.only(left: 12,top: 10),
                                     width: 200,
                                     child: Text(
                                       "₹ ${snapshot.data[index].price}",
@@ -136,39 +158,34 @@ class _cart_displayState extends State<cart_display> {
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 12,top: 5,bottom: 5),
+                                    margin: EdgeInsets.only(left: 12,top: 10,bottom: 5),
                                     width: 230,
                                     child: Text(
                                       "Qty : ${snapshot.data[index].qty}",
                                       overflow: TextOverflow.visible,
-                                      style: GoogleFonts.lora(fontSize: 18, color: Colors.black),
+                                      style: GoogleFonts.lora(fontSize: 18, color: Colors.blue,fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 12,top: 5),
+                                    margin: EdgeInsets.only(left: 12,top: 10),
                                     width: 230,
                                     height: 40,
-                                    child: Text(
-                                      "Total Price : ₹ ${totalPrice}",
-                                      overflow: TextOverflow.visible,
-                                      style: GoogleFonts.lora(fontSize: 16, color: Colors.black),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Total Price : ",
+                                          overflow: TextOverflow.visible,
+                                          style: GoogleFonts.lora(fontSize: 20, color: Colors.red),
+                                        ),
+                                        Text(
+                                          "₹ $totalPrice",
+                                          overflow: TextOverflow.visible,
+                                          style: GoogleFonts.lora(fontSize: 20, color: Colors.green,fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
-                              ),
-                              Container(
-                                  margin: EdgeInsets.only(left: 12,top: 5,bottom: 10),
-                                  width: 220,
-                                  height: 35,
-                                  child: ElevatedButton(
-                                    onPressed: (){
-                                      print(totalPrice);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black
-                                    ),
-                                    child: Text("Buy",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
-                                  )
                               ),
                             ],
                           ),
@@ -181,6 +198,36 @@ class _cart_displayState extends State<cart_display> {
             }
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: HexColor("#FB6D48"),
+        items: [
+          BottomNavigationBarItem(
+              icon: Container(
+                margin: EdgeInsets.only(top: 15),
+                child: Text(
+                  "₹ $totalCartPrice",
+                  style: GoogleFonts.lora(fontSize: 20, color: Colors.white,fontWeight: FontWeight.bold),
+                ),
+              ),
+              label: ""
+          ),
+          BottomNavigationBarItem(
+              icon: Container(
+                margin: EdgeInsets.only(top: 15),
+                child: TextButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Payment_User(total_amount: totalCartPrice)));
+                  },
+                  child: Text(
+                    "Buy",
+                    style: GoogleFonts.acme(fontSize: 20, color: Colors.white,fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            label: ""
+          )
+        ],
       ),
     );
   }
@@ -202,14 +249,17 @@ class _cart_displayState extends State<cart_display> {
     return users;
   }
 
-Future <void> deleteCartItem(String id) async{
 
-  String URL = "http://$IP_Address/Charity_Hope/cart_delete.php";
-  var res = await http.post(Uri.parse(URL),body: {"id":id});
-  var response = jsonDecode(res.body);
-  if(response["success"]==true){
-    print("success");
+  Future<void> deleteCartItem(String id, double itemTotalPrice) async {
+    String URL = "http://$IP_Address/Charity_Hope/cart_delete.php";
+    var res = await http.post(Uri.parse(URL), body: {"id": id});
+    var response = jsonDecode(res.body);
+    if (response["success"] == true) {
+      setState(() {
+        totalCartPrice -= itemTotalPrice;
+      });
+      print("success");
+    }
   }
-}
 
 }

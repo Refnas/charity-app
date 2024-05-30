@@ -1,39 +1,51 @@
 
 import 'dart:io';
-
 import 'package:charity_hope/Admin_Screens/admin_craft_details.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 import '../main.dart';
 
-class add_craft extends StatefulWidget {
-  const add_craft({Key? key}) : super(key: key);
+class update_craft extends StatefulWidget {
+
+  update_craft({required this.craftData});
+
+  final Datamodel craftData;
 
   @override
-  State<add_craft> createState() => _add_craftState();
+  State<update_craft> createState() => _update_craftState();
 }
 
-class _add_craftState extends State<add_craft> {
+class _update_craftState extends State<update_craft> {
 
   final GlobalKey <FormState> formKey = GlobalKey <FormState> ();
 
   var craftImage;
+  var recImg;
+  final picker = ImagePicker();
   TextEditingController name = TextEditingController();
   TextEditingController craftId = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController price = TextEditingController();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    name = TextEditingController(text: widget.craftData.name);
+    craftId = TextEditingController(text: widget.craftData.craft_id);
+    description = TextEditingController(text: widget.craftData.description);
+    price = TextEditingController(text: widget.craftData.price);
+    recImg = "${widget.craftData.image}";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Craft"),
+        title: Text("Update Craft"),
         centerTitle: true,
         backgroundColor: HexColor("#FB6D48"),
       ),
@@ -150,7 +162,7 @@ class _add_craftState extends State<add_craft> {
                                   Icon(Icons.image,color: HexColor("#FB6D48")),
                                   SizedBox(width: 10,),
                                   Text(
-                                      "Craft Image :",
+                                    "Craft Image :",
                                     style: TextStyle(color: HexColor("#FB6D48"),fontSize: 20),
                                   ),
                                   SizedBox(width: 10,),
@@ -167,20 +179,31 @@ class _add_craftState extends State<add_craft> {
                               ),
                               SizedBox(height: 15,),
                               Container(
-                                child: craftImage != null ?
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.only(left: 10,top: 10),
-                                              height: 100,
-                                              width: 150,
-                                                child: Image.asset(craftImage)
-                                            ),
-                                          ],
-                                        ) :
-                                        Center(child: Text("Image not selected"),),
+                                child: recImg != null && craftImage == null ?
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                        padding: EdgeInsets.only(left: 10,top: 10),
+                                        height: 150,
+                                        width: 150,
+                                        child: Image.network(recImg)
+                                    ),
+                                  ],
+                                ) :
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                        padding: EdgeInsets.only(left: 10,top: 10),
+                                        height: 150,
+                                        width: 100,
+                                        child: Image.asset(craftImage)
+                                    ),
+                                  ],
+                                )
                               )
                             ],
                           ),
@@ -198,14 +221,14 @@ class _add_craftState extends State<add_craft> {
                     onPressed: () async {
                       print(craftImage);
                       if (formKey.currentState!.validate()) {
-                        craftAdd();
+                        updateData();
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => admin_craft_details()),);
                       }
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: HexColor("#FB6D48")
                     ),
-                    child: Text("Add Craft",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
+                    child: Text("Update",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
                   )
               ),
             ],
@@ -223,16 +246,18 @@ class _add_craftState extends State<add_craft> {
       String fileName = imageTemporary.path;
       setState(() {
         craftImage = fileName;
+        recImg = null;
       });
     } catch(error) {
       print("error: $error");
     }
   }
 
-  Future craftAdd() async{
+    Future updateData() async{
 
-    final uri = Uri.parse("http://$IP_Address/Charity_Hope/admin_add_craft.php");
+    final uri = Uri.parse("http://$IP_Address/Charity_Hope/admin_update_craft.php");
     var request = http.MultipartRequest('POST',uri);
+    request.fields['id'] = widget.craftData.id;
     request.fields['name'] = name.text;
     request.fields['craft_id'] = craftId.text;
     request.fields['price'] = price.text;
@@ -252,7 +277,7 @@ class _add_craftState extends State<add_craft> {
       price.clear();
 
       final snackBar = SnackBar(
-        content: Text("Craft added successfully"),
+        content: Text("Craft updated successfully"),
         action: SnackBarAction(
           label: "Ok",
           onPressed: () {},
@@ -261,7 +286,7 @@ class _add_craftState extends State<add_craft> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       final snackBar = SnackBar(
-        content: Text("Craft adding failed, try again"),
+        content: Text("Craft updating failed, try again"),
         action: SnackBarAction(
           label: "Ok",
           onPressed: () {},

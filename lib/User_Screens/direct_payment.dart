@@ -1,23 +1,31 @@
 import 'dart:convert';
-import 'package:charity_hope/User_Screens/cart_display_screen.dart';
-import 'package:flutter/cupertino.dart';
+
+import 'package:charity_hope/User_Screens/Craft_display_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 
-import '../../main.dart';
+import '../main.dart';
+import 'cart_display_screen.dart';
 
-class Payment_User extends StatefulWidget {
+class direct_payment extends StatefulWidget {
   final double total_amount;
+  final String qty;
+  final String craftId;
 
-  const Payment_User({required this.total_amount});
+  const direct_payment({
+    required this.total_amount,
+    required this.qty,
+    required this.craftId
+  });
 
   @override
-  _Payment_UserState createState() => _Payment_UserState();
+  State<direct_payment> createState() => _direct_paymentState();
 }
 
-class _Payment_UserState extends State<Payment_User> {
+class _direct_paymentState extends State<direct_payment> {
+
   TextEditingController name = new TextEditingController();
   var bank;
   TextEditingController phone = new TextEditingController();
@@ -42,46 +50,6 @@ class _Payment_UserState extends State<Payment_User> {
     message = "";
 
     super.initState();
-  }
-
-  Future<void> submitData() async {
-    var send = await http.post(
-        Uri.parse("http://$IP_Address/Charity_Hope/payment_user.php"),
-        body: {
-          "name": name.text,
-          "phone": phone.text,
-          "bank": bank.toString(),
-          "ac_no": ac_no.text,
-          "total_amt": total_amt.text,
-          "uid":userId,
-        });
-
-    if (send.statusCode == 200) {
-      var data = json.decode(send.body);
-      var responseMessage = data["message"];
-      var responseError = data["error"];
-      if (responseError) {
-        setState(() {
-          status = false;
-          message = responseMessage;
-        });
-      } else {
-        name.clear();
-        phone.clear();
-        ac_no.clear();
-        total_amt.clear();
-
-        setState(() {
-          status = true;
-          message = responseMessage;
-        });
-      }
-    } else {
-      setState(() {
-        message = "Error:Server error";
-        status = false;
-      });
-    }
   }
 
   @override
@@ -300,7 +268,7 @@ class _Payment_UserState extends State<Payment_User> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    cart_display()));
+                                                    craft_display()));
                                       },
                                       child: Text("ok",style: TextStyle(color: HexColor("#FB6D48"))),),
                                     TextButton(
@@ -335,4 +303,47 @@ class _Payment_UserState extends State<Payment_User> {
       ),
     );
   }
+
+  Future<void> submitData() async {
+    var send = await http.post(
+        Uri.parse("http://$IP_Address/Charity_Hope/direct_payment.php"),
+        body: {
+          "name": name.text,
+          "phone": phone.text,
+          "bank": bank.toString(),
+          "ac_no": ac_no.text,
+          "total_amt": total_amt.text,
+          "uid":userId,
+          "craft_id": widget.craftId.toString(),
+          "qty": widget.qty.toString()
+        });
+
+    if (send.statusCode == 200) {
+      var data = json.decode(send.body);
+      var responseMessage = data["message"];
+      var responseError = data["error"];
+      if (responseError) {
+        setState(() {
+          status = false;
+          message = responseMessage;
+        });
+      } else {
+        name.clear();
+        phone.clear();
+        ac_no.clear();
+        total_amt.clear();
+
+        setState(() {
+          status = true;
+          message = responseMessage;
+        });
+      }
+    } else {
+      setState(() {
+        message = "Error:Server error";
+        status = false;
+      });
+    }
+  }
+
 }

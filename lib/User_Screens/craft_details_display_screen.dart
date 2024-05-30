@@ -1,4 +1,6 @@
 
+import 'package:charity_hope/User_Screens/Craft_display_screen.dart';
+import 'package:charity_hope/User_Screens/direct_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -35,6 +37,7 @@ class _craft_detailsState extends State<craft_details> {
   Widget build(BuildContext context) {
 
     double totalPrice = double.parse(widget.craft_data.price) * qty;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -165,6 +168,7 @@ class _craft_detailsState extends State<craft_details> {
                     height: 60,
                     child: OutlinedButton(
                       onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => direct_payment(total_amount: totalPrice,craftId: widget.craft_data.craft_id,qty: qty.toString())));
                       },
                       style: ElevatedButton.styleFrom(
                         side: BorderSide(width: 2, color: HexColor("#FB6D48")),
@@ -184,6 +188,7 @@ class _craft_detailsState extends State<craft_details> {
                       label: Text("ADD TO CART",style: TextStyle(color: Colors.black),),
                       onPressed: (){
                         add_to_cart();
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => craft_display()));
                       },
                       style: ElevatedButton.styleFrom(
                         side: BorderSide(width: 2, color: Colors.black),

@@ -26,7 +26,7 @@ class _event_bookingState extends State<event_booking> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Donation"),
+        title: Text("Book Event"),
         centerTitle: true,
         backgroundColor: HexColor("#FB6D48"),
       ),
