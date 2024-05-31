@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:charity_hope/Login_and_Register/admin_login_screen.dart';
+import 'package:charity_hope/Login_and_Register/forgot_password.dart';
 import 'package:charity_hope/Login_and_Register/user_register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -144,7 +145,9 @@ class _user_loginState extends State<user_login> {
                         child: Align(
                           alignment: Alignment.topRight,
                           child: TextButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => forgot_password()));
+                            },
                             child: Text(
                                 "Forgot Password ?",
                                 style: GoogleFonts.merienda(fontSize: 12, color: HexColor("#000000"),fontWeight: FontWeight.w600)
