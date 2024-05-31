@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'Craft_display_screen.dart';
 import 'cart_display_screen.dart';
@@ -51,6 +52,7 @@ class _home_screenState extends State<home_screen> {
 
   @override
   void initState() {
+    getData();
     super.initState();
   }
 
@@ -86,7 +88,7 @@ class _home_screenState extends State<home_screen> {
                 ),
                 SizedBox(height: 20,),
                 ListTile(
-                  leading: Icon(Icons.person,color: Colors.black,),
+                  leading: Icon(Icons.shopping_cart_checkout,color: Colors.black,),
                   title: Text("My Orders",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black),),
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => my_orders()));
@@ -131,9 +133,7 @@ class _home_screenState extends State<home_screen> {
                 ListTile(
                   leading: Icon(Icons.call,color: Colors.black),
                   title: Text("Contact for enquiry",style: GoogleFonts.marcellus(fontWeight: FontWeight.w600,color: Colors.black),),
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
+                  onTap: () => _makePhoneCall('tel:+918111977259'),
                 ),
                 ListTile(
                   leading: Icon(Icons.group,color: Colors.black),
@@ -593,5 +593,12 @@ class _home_screenState extends State<home_screen> {
     return users;
   }
 
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
 }

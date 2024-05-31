@@ -103,42 +103,42 @@ class _my_ordersState extends State<my_orders> {
                             ),
                           ],
                         ),
-                        trailing: TextButton(
-                          onPressed: ()async{
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Cancel"),
-                                  content: Text(
-                                      "Canceling Order :\nOrder Id : #${snapshot.data[index].order_id}\nOrder Date : ${snapshot.data[index].order_date}\nPaid : ${snapshot.data[index].total_amt}"
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: (){
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Back")
-                                    ),
-                                    TextButton(
-                                        onPressed: (){
-                                          setState(() {
-                                            cancelOrder(snapshot.data[index].order_id);
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                        child: Text("Proceed")
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: Text(
-                              "Cancel",
-                              style: TextStyle(color: HexColor("#FB6D48"),fontSize: 18)
-                          ),
-                        ),
+                        // trailing: TextButton(
+                        //   onPressed: ()async{
+                        //     showDialog(
+                        //       context: context,
+                        //       builder: (BuildContext context) {
+                        //         return AlertDialog(
+                        //           title: Text("Cancel"),
+                        //           content: Text(
+                        //               "Canceling Order :\nOrder Id : #${snapshot.data[index].order_id}\nOrder Date : ${snapshot.data[index].order_date}\nPaid : ${snapshot.data[index].total_amt}"
+                        //           ),
+                        //           actions: [
+                        //             TextButton(
+                        //                 onPressed: (){
+                        //                   Navigator.pop(context);
+                        //                 },
+                        //                 child: Text("Back")
+                        //             ),
+                        //             TextButton(
+                        //                 onPressed: (){
+                        //                   setState(() {
+                        //                     cancelOrder(snapshot.data[index].order_id);
+                        //                     Navigator.pop(context);
+                        //                   });
+                        //                 },
+                        //                 child: Text("Proceed")
+                        //             ),
+                        //           ],
+                        //         );
+                        //       },
+                        //     );
+                        //   },
+                        //   child: Text(
+                        //       "Cancel",
+                        //       style: TextStyle(color: HexColor("#FB6D48"),fontSize: 18)
+                        //   ),
+                        // ),
                       ),
                     );
                   },

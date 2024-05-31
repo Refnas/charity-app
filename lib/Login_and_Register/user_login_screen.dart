@@ -21,6 +21,8 @@ class user_login extends StatefulWidget {
 
 class _user_loginState extends State<user_login> {
 
+  late bool _passwordVisible;
+
   final GlobalKey <FormState> formKey = GlobalKey <FormState> ();
 
   TextEditingController username = TextEditingController();
@@ -31,6 +33,7 @@ class _user_loginState extends State<user_login> {
     // TODO: implement initState
     username = TextEditingController();
     password = TextEditingController();
+    _passwordVisible = false;
     super.initState();
   }
 
@@ -106,12 +109,25 @@ class _user_loginState extends State<user_login> {
                                 ),
                                 TextFormField(
                                   controller: password,
+                                  obscureText: !_passwordVisible,
                                   decoration: InputDecoration(
                                     label: Text(
                                       "Password",
                                       style: GoogleFonts.merienda(fontSize: 18, color: HexColor("#000000"),fontWeight: FontWeight.w600),
                                     ),
-                                    suffixIcon: Icon(Icons.visibility_off,color: HexColor("#7F8C8D"),),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _passwordVisible ?
+                                        Icons.visibility :
+                                        Icons.visibility_off,
+                                        color: HexColor("#7F8C8D"),
+                                      ),
+                                      onPressed: (){
+                                        setState(() {
+                                          _passwordVisible = !_passwordVisible;
+                                        });
+                                      },
+                                    ),
                                   ),
                                   validator: ((value) {
                                     if(value!.isEmpty){

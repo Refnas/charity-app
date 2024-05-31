@@ -14,6 +14,8 @@ class user_register extends StatefulWidget {
 
 class _user_registerState extends State<user_register> {
 
+  late bool _passwordVisible;
+
   final GlobalKey <FormState> formKey = GlobalKey <FormState> ();
 
   TextEditingController username = TextEditingController();
@@ -28,6 +30,7 @@ class _user_registerState extends State<user_register> {
     email = TextEditingController();
     phone = TextEditingController();
     password = TextEditingController();
+    _passwordVisible = false;
     super.initState();
   }
 
@@ -39,36 +42,31 @@ class _user_registerState extends State<user_register> {
           children: [
             Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        HexColor("#000000"),
-                        HexColor("#7F8C8D"),
-                      ]
-                  )
+                  color: HexColor("#FB6D48")
               ),
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 1,
               child: Padding(
                 padding: const EdgeInsets.only(top: 70,left: 20),
                 child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Hello Welcome,",
-                          style: GoogleFonts.eduNswActFoundation(fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold),
-                        ),
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Hello Welcome,",
+                        style: GoogleFonts.ebGaramond(fontSize: 25, color: Colors.white),
                       ),
-                      SizedBox(height: 35,),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "SignUp",
-                          style: GoogleFonts.eduNswActFoundation(fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold),
-                        ),
+                    ),
+                    SizedBox(height: 35,),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "SignUp",
+                        style: GoogleFonts.ebGaramond(fontSize: 25, color: Colors.white,fontWeight: FontWeight.bold),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -138,12 +136,25 @@ class _user_registerState extends State<user_register> {
                               ),
                               TextFormField(
                                 controller: password,
+                                obscureText: !_passwordVisible,
                                 decoration: InputDecoration(
                                   label: Text(
                                     "Password",
                                     style: GoogleFonts.merienda(fontSize: 18, color: HexColor("#000000"),fontWeight: FontWeight.w600),
                                   ),
-                                  suffixIcon: Icon(Icons.visibility_off,color: HexColor("#7F8C8D"),),
+                                  suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _passwordVisible ?
+                                            Icons.visibility :
+                                            Icons.visibility_off,
+                                        color: HexColor("#7F8C8D"),
+                                      ),
+                                    onPressed: (){
+                                        setState(() {
+                                          _passwordVisible = !_passwordVisible;
+                                        });
+                                    },
+                                  ),
                                 ),
                                 validator: ((value) {
                                   if(value!.isEmpty){
@@ -187,7 +198,7 @@ class _user_registerState extends State<user_register> {
                             register();
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent
+                              backgroundColor: HexColor("#65B741")
                           ),
                           child: Text("Signup",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
                         ),
